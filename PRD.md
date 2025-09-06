@@ -119,17 +119,17 @@ contract IdoSaleNaira {
 
 ## 7. Timeline
 
-### Phase 1: Development (2 weeks)
+### Phase 1: Development (8 weeks)
 - Smart contract development
 - Unit test implementation
 - Code review
 
-### Phase 2: Testing (1 week)
+### Phase 2: Testing (5 hr)
 - Testnet deployment
 - Integration testing
 - Security audit
 
-### Phase 3: Deployment (1 week)
+### Phase 3: Deployment (2hrs)
 - Mainnet deployment
 - Contract verification
 - Documentation completion

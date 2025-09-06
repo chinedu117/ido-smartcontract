@@ -1,0 +1,29 @@
+{
+  "name": "ido-smartcontract",
+  "version": "1.0.0",
+  "description": "This repository contains the smart contracts for MedChain's IDO (Initial DEX Offering) sale, where MCH tokens can be purchased using NAIRA stable tokens.",
+  "main": "hardhat.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinedu117/ido-smartcontract.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chinedu117/ido-smartcontract/issues"
+  },
+  "homepage": "https://github.com/chinedu117/ido-smartcontract#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "@openzeppelin/contracts": "^5.4.0",
+    "dotenv": "^17.2.2",
+    "hardhat": "^3.0.4"
+  }
+}
