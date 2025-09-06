@@ -1,12 +1,20 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import { Contract } from "ethers";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 describe("IdoSaleNaira", function () {
-  let deployer, buyer, other;
-  let NAIRA, MCH, IDO;
-  let naira, mch, ido;
+  let deployer: SignerWithAddress;
+  let buyer: SignerWithAddress;
+  let other: SignerWithAddress;
+  let NAIRA: Contract;
+  let MCH: Contract;
+  let IDO: Contract;
+  let naira: Contract;
+  let mch: Contract;
+  let ido: Contract;
 
-  const parse = (n) => ethers.utils.parseUnits(n.toString(), 18);
+  const parse = (n: string | number): bigint => ethers.utils.parseUnits(n.toString(), 18);
 
   beforeEach(async () => {
     [deployer, buyer, other] = await ethers.getSigners();
@@ -22,11 +30,11 @@ describe("IdoSaleNaira", function () {
     await mch.deployed();
 
     // Deploy IDO
-    const now = (await ethers.provider.getBlock("latest")).timestamp;
-    const start = now + 1; // start soon
-    const end = now + 60 * 60 * 24; // 1 day
-    const price = parse("2.5"); // 2.5 NAIRA per 1 MCH
-    const allocation = parse("200000000");
+    const now: number = (await ethers.provider.getBlock("latest")).timestamp;
+    const start: number = now + 1; // start soon
+    const end: number = now + 60 * 60 * 24; // 1 day
+    const price: bigint = parse("2.5"); // 2.5 NAIRA per 1 MCH
+    const allocation: bigint = parse("200000000");
 
     const Ido = await ethers.getContractFactory("IdoSaleNaira");
     ido = await Ido.deploy(mch.address, naira.address, price, start, end, allocation);
@@ -46,7 +54,7 @@ describe("IdoSaleNaira", function () {
   });
 
   it("buyer can purchase MCH with NAIRA", async () => {
-    const amountToSpend = parse("2.5"); // 2.5 NAIRA
+    const amountToSpend: bigint = parse("2.5"); // 2.5 NAIRA
     await naira.connect(buyer).approve(ido.address, amountToSpend);
 
     // Wait until IDO is active
@@ -57,22 +65,23 @@ describe("IdoSaleNaira", function () {
       .to.emit(ido, "Bought")
       .withArgs(buyer.address, amountToSpend, parse("1"));
 
-    const mchBalance = await mch.balanceOf(buyer.address);
+    const mchBalance: bigint = await mch.balanceOf(buyer.address);
     expect(mchBalance).to.equal(parse("1"));
 
-    const tokensSold = await ido.tokensSold();
+    const tokensSold: bigint = await ido.tokensSold();
     expect(tokensSold).to.equal(parse("1"));
   });
 
   it("should fail if not active yet", async () => {
-    const amountToSpend = parse("2.5");
+    const amountToSpend: bigint = parse("2.5");
     await naira.connect(buyer).approve(ido.address, amountToSpend);
 
-    await expect(ido.connect(buyer).buy(amountToSpend)).to.be.revertedWith("IDO not active");
+    await expect(ido.connect(buyer).buy(amountToSpend))
+      .to.be.revertedWith("IDO not active");
   });
 
   it("owner can withdraw NAIRA after purchases", async () => {
-    const amountToSpend = parse("2.5");
+    const amountToSpend: bigint = parse("2.5");
     await naira.connect(buyer).approve(ido.address, amountToSpend);
 
     // fast-forward into sale
@@ -84,7 +93,7 @@ describe("IdoSaleNaira", function () {
       .to.emit(ido, "WithdrawNaira")
       .withArgs(deployer.address, amountToSpend);
 
-    const bal = await naira.balanceOf(deployer.address);
+    const bal: bigint = await naira.balanceOf(deployer.address);
     expect(bal).to.equal(parse("1000000000").sub(parse("10000")).add(amountToSpend));
   });
 
@@ -93,12 +102,12 @@ describe("IdoSaleNaira", function () {
     await ethers.provider.send("evm_increaseTime", [60 * 60 * 25]); // > 1 day
     await ethers.provider.send("evm_mine", []);
 
-    const unsold = parse("200000000");
+    const unsold: bigint = parse("200000000");
     await expect(ido.withdrawUnsoldMCH())
       .to.emit(ido, "WithdrawUnsoldMCH")
       .withArgs(deployer.address, unsold);
 
-    const bal = await mch.balanceOf(deployer.address);
+    const bal: bigint = await mch.balanceOf(deployer.address);
     expect(bal).to.equal(parse("1000000000").sub(parse("200000000")).add(unsold));
   });
 

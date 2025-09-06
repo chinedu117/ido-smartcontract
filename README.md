@@ -1,86 +1,57 @@
-# MedChain IDO Smart Contracts
+# Sample Hardhat 3 Beta Project (`mocha` and `ethers`)
 
-This repository contains the smart contracts for MedChain's IDO (Initial DEX Offering) sale, where MCH tokens can be purchased using NAIRA stable tokens.
+This project showcases a Hardhat 3 Beta project using `mocha` for tests and the `ethers` library for Ethereum interactions.
 
-## Overview
+To learn more about the Hardhat 3 Beta, please visit the [Getting Started guide](https://hardhat.org/docs/getting-started#getting-started-with-hardhat-3). To share your feedback, join our [Hardhat 3 Beta](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group or [open an issue](https://github.com/NomicFoundation/hardhat/issues/new) in our GitHub issue tracker.
 
-The system consists of three main contracts:
+## Project Overview
 
-- [`MCH.sol`](contracts/MCH.sol): The MedChain (MCH) ERC20 token
-- [`NAIRA.sol`](contracts/NAIRA.sol): A stable token used for purchases 
-- [`IDOSaleNaira.sol`](contracts/IDOSaleNaira.sol): The IDO sale contract
+This example project includes:
 
-## Contract Details
+- A simple Hardhat configuration file.
+- Foundry-compatible Solidity unit tests.
+- TypeScript integration tests using `mocha` and ethers.js
+- Examples demonstrating how to connect to different types of networks, including locally simulating OP mainnet.
 
-### MCH Token
-- Symbol: MCH
-- Name: MedChain Token
-- Decimals: 18
-- Initial Supply: 1,000,000,000 MCH
-- Features: Mintable by owner
+## Usage
 
-### NAIRA Token
-- Symbol: NAIRA
-- Name: NAIRA Stable Token
-- Decimals: 18
-- Initial Supply: 1,000,000,000 NAIRA
-- Features: Mintable by owner
+### Running Tests
 
-### IDO Sale
-- Price: 2.5 NAIRA per 1 MCH
-- Total Allocation: 200,000,000 MCH
-- Duration: 7 days
-- Features:
-  - Purchase MCH using NAIRA tokens
-  - Owner can withdraw collected NAIRA
-  - Owner can withdraw unsold MCH after sale ends
+To run all the tests in the project, execute the following command:
 
-## Development
-
-### Prerequisites
-
-- Node.js
-- npm or yarn
-- Hardhat
-
-### Setup
-
-1. Install dependencies:
-```sh
-npm install
-```
-
-2. Copy `.env.sample` to `.env` and fill in your values:
-```sh
-cp .env.sample .env
-```
-
-3. Configure your environment variables:
-- `SEPOLIA_RPC_URL`: Sepolia testnet RPC URL
-- `PRIVATE_KEY`: Your deployment wallet private key
-- `ETHERSCAN_API_KEY`: For contract verification
-
-### Testing
-
-Run the test suite:
-```sh
+```shell
 npx hardhat test
 ```
 
-### Deployment
+You can also selectively run the Solidity or `mocha` tests:
 
-Deploy to Sepolia testnet:
-```sh
-npx hardhat run scripts/deploy.js --network sepolia
+```shell
+npx hardhat test solidity
+npx hardhat test mocha
 ```
 
-## Security
+### Make a deployment to Sepolia
 
-- Contracts use OpenZeppelin's battle-tested implementations
-- ReentrancyGuard protection on critical functions
-- Owner privileges limited to token minting and fund withdrawal
-- Full test coverage
+This project includes an example Ignition module to deploy the contract. You can deploy this module to a locally simulated chain or to Sepolia.
 
-## License
+To run the deployment to a local chain:
 
-MIT
+```shell
+npx hardhat ignition deploy ignition/modules/Counter.ts
+```
+
+To run the deployment to Sepolia, you need an account with funds to send the transaction. The provided Hardhat configuration includes a Configuration Variable called `SEPOLIA_PRIVATE_KEY`, which you can use to set the private key of the account you want to use.
+
+You can set the `SEPOLIA_PRIVATE_KEY` variable using the `hardhat-keystore` plugin or by setting it as an environment variable.
+
+To set the `SEPOLIA_PRIVATE_KEY` config variable using `hardhat-keystore`:
+
+```shell
+npx hardhat keystore set SEPOLIA_PRIVATE_KEY
+```
+
+After setting the variable, you can run the deployment with the Sepolia network:
+
+```shell
+npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
+```
