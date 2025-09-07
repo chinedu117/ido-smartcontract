@@ -6,7 +6,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title MedChain Token (MCH)
 contract MCH is ERC20, Ownable {
-    constructor(uint256 initialSupply) ERC20("MedChain Token", "MCH") {
+    constructor(uint256 initialSupply) 
+        ERC20("MedChain Token", "MCH")
+        Ownable(msg.sender)  // Initialize Ownable with deployer address
+    {
         _mint(msg.sender, initialSupply);
     }
 

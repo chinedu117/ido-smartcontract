@@ -2,7 +2,7 @@
 pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title IDO contract that accepts NAIRA (ERC20) and distributes MCH (ERC20)
@@ -32,7 +32,7 @@ contract IdoSaleNaira is ReentrancyGuard, Ownable {
         uint256 _startTime,
         uint256 _endTime,
         uint256 _totalTokensForSale
-    ) {
+    ) Ownable(msg.sender) {
         require(_startTime < _endTime, "invalid times");
         mchToken = _mchToken;
         nairaToken = _nairaToken;

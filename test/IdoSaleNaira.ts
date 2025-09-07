@@ -1,20 +1,20 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { Contract } from "ethers";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import type { Contract, ContractFactory } from "ethers";
+import type { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
+import { loadFixture, time } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
 describe("IdoSaleNaira", function () {
-  let deployer: SignerWithAddress;
-  let buyer: SignerWithAddress;
-  let other: SignerWithAddress;
-  let NAIRA: Contract;
-  let MCH: Contract;
-  let IDO: Contract;
+  let deployer: HardhatEthersSigner;
+  let buyer: HardhatEthersSigner;
+  let other: HardhatEthersSigner;
+  let NAIRA: ContractFactory;
+  let MCH: ContractFactory;
   let naira: Contract;
   let mch: Contract;
   let ido: Contract;
 
-  const parse = (n: string | number): bigint => ethers.utils.parseUnits(n.toString(), 18);
+  const parse = (n: string | number): bigint => ethers.parseUnits(n.toString(), 18);
 
   beforeEach(async () => {
     [deployer, buyer, other] = await ethers.getSigners();
